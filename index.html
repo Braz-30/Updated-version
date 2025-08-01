@@ -1,0 +1,245 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>SK Clothing Store</title>
+  <style>
+    * {
+      box-sizing: border-box;
+    }
+    body {
+      margin: 0;
+      font-family: Arial, sans-serif;
+    }
+    header {
+      background-color: #222;
+      color: white;
+      padding: 15px;
+      text-align: center;
+    }
+    nav {
+      background-color: #333;
+      display: flex;
+      flex-wrap: wrap;
+    }
+    nav a {
+      flex: 1 0 auto;
+      color: white;
+      text-align: center;
+      padding: 14px;
+      text-decoration: none;
+    }
+    nav a:hover {
+      background-color: #ddd;
+      color: black;
+    }
+
+    .home-banner {
+      width: 100%;
+      height: 200px;
+      background-image: url('Baxkgnd.jpg');
+      background-size: cover;
+      background-position: center;
+    }
+
+    .container {
+      display: flex;
+      flex-wrap: wrap;
+      padding: 20px;
+    }
+    .main {
+      flex: 3;
+      min-width: 250px;
+      padding: 10px;
+    }
+    .sidebar {
+      flex: 1;
+      min-width: 200px;
+      padding: 10px;
+      background-color: #f4f4f4;
+    }
+
+    .info-box {
+      background-color: #fff3e0;
+      padding: 15px;
+      border-radius: 8px;
+    }
+
+    .product-grid {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 15px;
+    }
+    .product {
+      flex: 1 1 calc(33.33% - 15px);
+      background-color: #fafafa;
+      padding: 10px;
+      border: 1px solid #ddd;
+      border-radius: 5px;
+      text-align: center;
+    }
+    .product img {
+      width: 100%;
+      height: auto;
+      border-radius: 5px;
+    }
+
+    .contact-section {
+      background-color: #fffae6;
+      padding: 20px;
+      border: 2px solid #ffcc00;
+      border-radius: 8px;
+      margin: 15px;
+      display: none;
+    }
+
+    @media (max-width: 768px) {
+      nav {
+        flex-direction: column;
+      }
+      nav a {
+        width: 100%;
+      }
+      .container {
+        flex-direction: column;
+      }
+      .product {
+        flex: 1 1 100%;
+      }
+    }
+  </style>
+</head>
+<body>
+
+  <header>
+    <h1>SK Clothing Store</h1>
+  </header>
+
+  <nav>
+    <a href="#" class="nav-link" data-target="home-section">Home</a>
+    <a href="#" class="nav-link" data-target="service-section">Service</a>
+    <a href="#" class="nav-link" data-target="contact-section">Contact</a>
+    <a href="#" class="nav-link" data-target="about-section">About Us</a>
+  </nav>
+
+  <!-- HOME -->
+  <div id="home-section">
+    <div class="home-banner"></div>
+
+    <div class="container">
+      <div class="main">
+        <div class="info-box">
+          <h2>Welcome to SK Clothing Store</h2>
+          <p>Explore our latest collection of trendy and comfortable apparel for every season.</p>
+        </div>
+
+       <!-- HOME PAGE PRODUCT SECTION -->
+<div class="product-grid">
+  <!-- Jacket -->
+  <a href="jacket.html" style="text-decoration: none; color: inherit;">
+    <div class="product">
+      <img src="Jacket.jpg" alt="Jacket" />
+      <h3>Jacket</h3>
+    </div>
+  </a>
+
+  <!-- T-Shirt -->
+  <a href="tshirt.html" style="text-decoration: none; color: inherit;">
+    <div class="product">
+      <img src="Tshirt.jpg" alt="T-Shirt" />
+      <h3>T-Shirt</h3>
+    </div>
+  </a>
+
+  <!-- Hoodie -->
+  <a href="hoodie.html" style="text-decoration: none; color: inherit;">
+    <div class="product">
+      <img src="Hoodie.jpg" alt="Hoodie" />
+      <h3>Hoodie</h3>
+    </div>
+  </a>
+
+  <!-- Shoes -->
+  <a href="shoes.html" style="text-decoration: none; color: inherit;">
+    <div class="product">
+      <img src="Shoes.jpg" alt="Shoes" />
+      <h3>Shoes</h3>
+    </div>
+  </a>
+
+  <!-- Pant -->
+  <a href="pant.html" style="text-decoration: none; color: inherit;">
+    <div class="product">
+      <img src="Pant.jpg" alt="Pant" />
+      <h3>Pant</h3>
+    </div>
+  </a>
+      <div class="sidebar">
+        <h3>Categories</h3>
+        <ul>
+          <li><a href="jacket.html">Jackets</a></li>
+          <li><a href="tshirt.html">T-Shirts</a></li>
+          <li><a href="pant.html">Pants</a></li>
+          <li><a href="hoodie.html">Hoodies</a></li>
+          <li><a href="shoes.html">Shoes</a></li>
+          <li><a href="#">Offers</a></li>
+        </ul>
+      </div>
+     </div>
+  </div>
+
+  <!-- SERVICE -->
+  <div id="service-section" style="display: none; padding: 20px;">
+    <h2>Our Services</h2>
+    <ul>
+      <li>Online shopping and in-store pickup</li>
+      <li>Home delivery</li>
+      <li>Fast interactions</li>
+      <li>Easy return policy</li>
+      <li>Eco-friendly packaging</li>
+      <li>Great quality products</li>
+    </ul>
+  </div>
+
+  <!-- CONTACT -->
+  <div id="contact-section" class="contact-section">
+    <h2>Contact Us</h2>
+    <p><strong>Address:</strong> New Road, Kathmandu, Nepal</p>
+    <p><strong>Email:</strong> support@sk.com</p>
+    <p><strong>Phone:</strong> +977-9828808001</p>
+    <p><strong>Opening Hours:</strong> Sun–Fri, 10:00 AM – 6:00 PM</p>
+  </div>
+
+  <!-- ABOUT -->
+  <div id="about-section" style="display: none; padding: 20px;">
+    <h2>About Us</h2>
+    <p>SK Clothing Store is an online platform for buying quality clothes and shoes. We're top-ranked for quality and customer service.</p>
+  </div>
+
+  <script>
+    const navLinks = document.querySelectorAll('nav a.nav-link');
+    const sections = ['home-section', 'service-section', 'contact-section', 'about-section'];
+
+    function hideAllSections() {
+      sections.forEach(id => {
+        document.getElementById(id).style.display = 'none';
+      });
+    }
+
+    navLinks.forEach(link => {
+      link.addEventListener('click', function(e) {
+        e.preventDefault();
+        const targetId = this.getAttribute('data-target');
+        hideAllSections();
+        document.getElementById(targetId).style.display = 'block';
+      });
+    });
+
+    // Show home section on page load
+    hideAllSections();
+    document.getElementById('home-section').style.display = 'block';
+  </script>
+
+</body>
+</html>
