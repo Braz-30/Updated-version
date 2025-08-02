@@ -1,0 +1,248 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Test Order System - SK Clothing Store</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 20px;
+            background-color: #f5f5f5;
+        }
+        .test-section {
+            background: white;
+            padding: 20px;
+            margin: 20px 0;
+            border-radius: 8px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+        .btn {
+            background-color: #4CAF50;
+            color: white;
+            padding: 10px 20px;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            margin: 5px;
+        }
+        .btn:hover {
+            background-color: #45a049;
+        }
+        .btn-danger {
+            background-color: #f44336;
+        }
+        .btn-danger:hover {
+            background-color: #da190b;
+        }
+        .data-display {
+            background-color: #f9f9f9;
+            padding: 15px;
+            border-radius: 4px;
+            margin: 10px 0;
+            font-family: monospace;
+            white-space: pre-wrap;
+        }
+    </style>
+</head>
+<body>
+    <h1>🧪 Test Order System</h1>
+    
+    <div class="test-section">
+        <h2>📊 Current Data Status</h2>
+        <button class="btn" onclick="checkData()">Check All Data</button>
+        <button class="btn btn-danger" onclick="clearAllData()">Clear All Data</button>
+        <div id="dataStatus"></div>
+    </div>
+
+    <div class="test-section">
+        <h2>🛒 Test Order Creation</h2>
+        <button class="btn" onclick="createTestOrder()">Create Test Order</button>
+        <button class="btn" onclick="createMultipleOrders()">Create 3 Test Orders</button>
+        <p>This will create a test order and trigger notifications.</p>
+    </div>
+
+    <div class="test-section">
+        <h2>📋 Stored Orders</h2>
+        <button class="btn" onclick="showOrders()">Show All Orders</button>
+        <div id="ordersDisplay"></div>
+    </div>
+
+    <div class="test-section">
+        <h2>🔔 Notifications</h2>
+        <button class="btn" onclick="showNotifications()">Show Notifications</button>
+        <button class="btn btn-danger" onclick="clearNotifications()">Clear Notifications</button>
+        <div id="notificationsDisplay"></div>
+    </div>
+
+    <div class="test-section">
+        <h2>🔗 Quick Links</h2>
+        <a href="index.html" class="btn">Go to Store</a>
+        <a href="admin-login.html" class="btn">Admin Login</a>
+        <a href="checkout.html" class="btn">Checkout Page</a>
+    </div>
+
+    <script src="notification-system.js"></script>
+    <script>
+        function checkData() {
+            const orders = JSON.parse(localStorage.getItem('allOrders') || '[]');
+            const notifications = JSON.parse(localStorage.getItem('orderNotifications') || '[]');
+            const cart = JSON.parse(localStorage.getItem('cart') || '[]');
+            
+            const status = `
+📊 DATA STATUS:
+===============
+Orders: ${orders.length}
+Notifications: ${notifications.length}
+Cart Items: ${cart.length}
+
+Latest Order: ${orders.length > 0 ? orders[orders.length - 1].orderId : 'None'}
+Latest Notification: ${notifications.length > 0 ? notifications[0].orderId : 'None'}
+            `;
+            
+            document.getElementById('dataStatus').innerHTML = `<div class="data-display">${status}</div>`;
+        }
+
+        function createTestOrder() {
+            const testOrder = {
+                orderId: 'TEST-' + Date.now(),
+                orderDate: new Date().toISOString(),
+                customer: {
+                    firstName: 'Test',
+                    lastName: 'Customer',
+                    email: 'test@example.com',
+                    phone: '+977-1234567890',
+                    address: 'Test Address',
+                    city: 'Kathmandu',
+                    postalCode: '44600'
+                },
+                items: [
+                    {
+                        name: 'Test Product',
+                        price: 1500,
+                        quantity: 2,
+                        image: 'Hoodie.jpg'
+                    }
+                ],
+                subtotal: 3000,
+                deliveryFee: 200,
+                total: 3200,
+                paymentMethod: 'cod',
+                status: 'new'
+            };
+
+            // Save to localStorage
+            const existingOrders = JSON.parse(localStorage.getItem('allOrders') || '[]');
+            existingOrders.push(testOrder);
+            localStorage.setItem('allOrders', JSON.stringify(existingOrders));
+
+            // Trigger notification
+            if (window.orderNotificationSystem) {
+                window.orderNotificationSystem.addNotification(testOrder);
+            }
+
+            alert(`Test order created: ${testOrder.orderId}`);
+            checkData();
+        }
+
+        function createMultipleOrders() {
+            for (let i = 1; i <= 3; i++) {
+                setTimeout(() => {
+                    const testOrder = {
+                        orderId: 'TEST-' + Date.now() + '-' + i,
+                        orderDate: new Date().toISOString(),
+                        customer: {
+                            firstName: 'Test',
+                            lastName: `Customer ${i}`,
+                            email: `test${i}@example.com`,
+                            phone: '+977-1234567890',
+                            address: `Test Address ${i}`,
+                            city: 'Kathmandu',
+                            postalCode: '44600'
+                        },
+                        items: [
+                            {
+                                name: `Test Product ${i}`,
+                                price: 1500 + (i * 100),
+                                quantity: i,
+                                image: 'Hoodie.jpg'
+                            }
+                        ],
+                        subtotal: (1500 + (i * 100)) * i,
+                        deliveryFee: 200,
+                        total: (1500 + (i * 100)) * i + 200,
+                        paymentMethod: 'cod',
+                        status: 'new'
+                    };
+
+                    const existingOrders = JSON.parse(localStorage.getItem('allOrders') || '[]');
+                    existingOrders.push(testOrder);
+                    localStorage.setItem('allOrders', JSON.stringify(existingOrders));
+
+                    if (window.orderNotificationSystem) {
+                        window.orderNotificationSystem.addNotification(testOrder);
+                    }
+                }, i * 1000);
+            }
+
+            alert('Creating 3 test orders with 1-second delays...');
+        }
+
+        function showOrders() {
+            const orders = JSON.parse(localStorage.getItem('allOrders') || '[]');
+            const display = orders.length > 0 ? 
+                orders.map(order => `
+Order ID: ${order.orderId}
+Customer: ${order.customer.firstName} ${order.customer.lastName}
+Total: Rs. ${order.total}
+Status: ${order.status || 'new'}
+Date: ${new Date(order.orderDate).toLocaleString()}
+                `).join('\n---\n') : 'No orders found';
+            
+            document.getElementById('ordersDisplay').innerHTML = `<div class="data-display">${display}</div>`;
+        }
+
+        function showNotifications() {
+            const notifications = JSON.parse(localStorage.getItem('orderNotifications') || '[]');
+            const display = notifications.length > 0 ? 
+                notifications.map(notification => `
+ID: ${notification.id}
+Order ID: ${notification.orderId}
+Customer: ${notification.customerName}
+Total: Rs. ${notification.total}
+Read: ${notification.read ? 'Yes' : 'No'}
+Date: ${new Date(notification.timestamp).toLocaleString()}
+                `).join('\n---\n') : 'No notifications found';
+            
+            document.getElementById('notificationsDisplay').innerHTML = `<div class="data-display">${display}</div>`;
+        }
+
+        function clearAllData() {
+            if (confirm('Are you sure you want to clear ALL data? This cannot be undone.')) {
+                localStorage.removeItem('allOrders');
+                localStorage.removeItem('orderNotifications');
+                localStorage.removeItem('cart');
+                localStorage.removeItem('lastOrder');
+                alert('All data cleared!');
+                checkData();
+            }
+        }
+
+        function clearNotifications() {
+            if (confirm('Clear all notifications?')) {
+                localStorage.removeItem('orderNotifications');
+                if (window.orderNotificationSystem) {
+                    window.orderNotificationSystem.clearAll();
+                }
+                alert('Notifications cleared!');
+                showNotifications();
+            }
+        }
+
+        // Auto-check data on page load
+        checkData();
+    </script>
+</body>
+</html> 

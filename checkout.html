@@ -1,0 +1,390 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Checkout - SK Clothing Store</title>
+  <style>
+    * {
+      box-sizing: border-box;
+    }
+    body {
+      font-family: Arial, sans-serif;
+      margin: 0;
+      background-color: #f5f5f5;
+    }
+    header {
+      background-color: #222;
+      color: white;
+      padding: 15px;
+      text-align: center;
+      position: relative;
+    }
+    .back-btn {
+      background-color: #666;
+      color: white;
+      border: none;
+      padding: 8px 16px;
+      border-radius: 4px;
+      cursor: pointer;
+      text-decoration: none;
+      display: inline-block;
+      position: absolute;
+      left: 20px;
+      top: 50%;
+      transform: translateY(-50%);
+    }
+    .back-btn:hover {
+      background-color: #555;
+    }
+    .container {
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 20px;
+      display: flex;
+      gap: 30px;
+    }
+    .checkout-form {
+      flex: 2;
+      background: white;
+      padding: 30px;
+      border-radius: 8px;
+      box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+    }
+    .order-summary {
+      flex: 1;
+      background: white;
+      padding: 30px;
+      border-radius: 8px;
+      box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+      height: fit-content;
+    }
+    .form-group {
+      margin-bottom: 20px;
+    }
+    label {
+      display: block;
+      margin-bottom: 5px;
+      font-weight: bold;
+      color: #333;
+    }
+    input, select, textarea {
+      width: 100%;
+      padding: 12px;
+      border: 1px solid #ddd;
+      border-radius: 4px;
+      font-size: 14px;
+    }
+    input:focus, select:focus, textarea:focus {
+      outline: none;
+      border-color: #4CAF50;
+    }
+    .form-row {
+      display: flex;
+      gap: 15px;
+    }
+    .form-row .form-group {
+      flex: 1;
+    }
+    .order-item {
+      display: flex;
+      align-items: center;
+      padding: 15px 0;
+      border-bottom: 1px solid #eee;
+    }
+    .order-item img {
+      width: 60px;
+      height: 60px;
+      object-fit: cover;
+      border-radius: 4px;
+      margin-right: 15px;
+    }
+    .order-item-details {
+      flex: 1;
+    }
+    .order-item-name {
+      font-weight: bold;
+      margin-bottom: 5px;
+    }
+    .order-item-price {
+      color: #4CAF50;
+      font-weight: bold;
+    }
+    .order-item-quantity {
+      color: #666;
+      font-size: 14px;
+    }
+    .order-total {
+      margin-top: 20px;
+      padding-top: 20px;
+      border-top: 2px solid #ddd;
+    }
+    .total-row {
+      display: flex;
+      justify-content: space-between;
+      margin-bottom: 10px;
+    }
+    .total-row.final {
+      font-size: 18px;
+      font-weight: bold;
+      color: #4CAF50;
+      border-top: 1px solid #ddd;
+      padding-top: 10px;
+    }
+    .payment-methods {
+      margin-top: 30px;
+    }
+    .payment-option {
+      display: flex;
+      align-items: center;
+      padding: 15px;
+      border: 1px solid #ddd;
+      border-radius: 4px;
+      margin-bottom: 10px;
+      cursor: pointer;
+    }
+    .payment-option:hover {
+      border-color: #4CAF50;
+    }
+    .payment-option input[type="radio"] {
+      width: auto;
+      margin-right: 10px;
+    }
+    .place-order-btn {
+      background-color: #4CAF50;
+      color: white;
+      border: none;
+      padding: 15px 30px;
+      border-radius: 4px;
+      cursor: pointer;
+      font-size: 16px;
+      font-weight: bold;
+      width: 100%;
+      margin-top: 20px;
+    }
+    .place-order-btn:hover {
+      background-color: #45a049;
+    }
+    .place-order-btn:disabled {
+      background-color: #ccc;
+      cursor: not-allowed;
+    }
+    .empty-cart {
+      text-align: center;
+      padding: 50px;
+      color: #666;
+    }
+    .empty-cart a {
+      color: #4CAF50;
+      text-decoration: none;
+    }
+    @media (max-width: 768px) {
+      .container {
+        flex-direction: column;
+      }
+      .form-row {
+        flex-direction: column;
+        gap: 0;
+      }
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <a href="index.html" class="back-btn">← Back to Store</a>
+    <h1>Checkout</h1>
+  </header>
+
+  <div class="container">
+    <div class="checkout-form">
+      <h2>Customer Information</h2>
+      <form id="checkoutForm">
+        <div class="form-row">
+          <div class="form-group">
+            <label for="firstName">First Name *</label>
+            <input type="text" id="firstName" name="firstName" required>
+          </div>
+          <div class="form-group">
+            <label for="lastName">Last Name *</label>
+            <input type="text" id="lastName" name="lastName" required>
+          </div>
+        </div>
+        
+        <div class="form-group">
+          <label for="email">Email Address *</label>
+          <input type="email" id="email" name="email" required>
+        </div>
+        
+        <div class="form-group">
+          <label for="phone">Phone Number *</label>
+          <input type="tel" id="phone" name="phone" required>
+        </div>
+        
+        <div class="form-group">
+          <label for="address">Delivery Address *</label>
+          <textarea id="address" name="address" rows="3" required></textarea>
+        </div>
+        
+        <div class="form-row">
+          <div class="form-group">
+            <label for="city">City *</label>
+            <input type="text" id="city" name="city" required>
+          </div>
+          <div class="form-group">
+            <label for="postalCode">Postal Code *</label>
+            <input type="text" id="postalCode" name="postalCode" required>
+          </div>
+        </div>
+        
+        <div class="payment-methods">
+          <h3>Payment Method</h3>
+          <div class="payment-option">
+            <input type="radio" id="cod" name="paymentMethod" value="cod" checked>
+            <label for="cod">Cash on Delivery</label>
+          </div>
+          <div class="payment-option">
+            <input type="radio" id="card" name="paymentMethod" value="card">
+            <label for="card">Credit/Debit Card</label>
+          </div>
+          <div class="payment-option">
+            <input type="radio" id="esewa" name="paymentMethod" value="esewa">
+            <label for="esewa">eSewa</label>
+          </div>
+        </div>
+        
+        <button type="submit" class="place-order-btn" id="placeOrderBtn">Place Order</button>
+      </form>
+    </div>
+    
+    <div class="order-summary">
+      <h2>Order Summary</h2>
+      <div id="orderItems"></div>
+      <div class="order-total" id="orderTotal"></div>
+    </div>
+  </div>
+
+  <script>
+    let cart = JSON.parse(localStorage.getItem('cart')) || [];
+    let cartTotal = 0;
+    const deliveryFee = 200;
+
+    function displayOrderSummary() {
+      const orderItems = document.getElementById('orderItems');
+      const orderTotal = document.getElementById('orderTotal');
+      
+      if (cart.length === 0) {
+        orderItems.innerHTML = `
+          <div class="empty-cart">
+            <h3>Your cart is empty</h3>
+            <p>Add some items to your cart to proceed with checkout.</p>
+            <a href="index.html">Continue Shopping</a>
+          </div>
+        `;
+        orderTotal.innerHTML = '';
+        document.getElementById('placeOrderBtn').disabled = true;
+        return;
+      }
+
+      orderItems.innerHTML = '';
+      cartTotal = 0;
+
+      cart.forEach(item => {
+        const itemTotal = item.price * item.quantity;
+        cartTotal += itemTotal;
+
+        orderItems.innerHTML += `
+          <div class="order-item">
+            <img src="${item.image}" alt="${item.name}">
+            <div class="order-item-details">
+              <div class="order-item-name">${item.name}</div>
+              <div class="order-item-price">Rs. ${item.price}</div>
+              <div class="order-item-quantity">Quantity: ${item.quantity}</div>
+            </div>
+            <div class="order-item-total">
+              Rs. ${itemTotal.toLocaleString()}
+            </div>
+          </div>
+        `;
+      });
+
+      const finalTotal = cartTotal + deliveryFee;
+      
+      orderTotal.innerHTML = `
+        <div class="total-row">
+          <span>Subtotal:</span>
+          <span>Rs. ${cartTotal.toLocaleString()}</span>
+        </div>
+        <div class="total-row">
+          <span>Delivery Fee:</span>
+          <span>Rs. ${deliveryFee}</span>
+        </div>
+        <div class="total-row final">
+          <span>Total:</span>
+          <span>Rs. ${finalTotal.toLocaleString()}</span>
+        </div>
+      `;
+    }
+
+    document.getElementById('checkoutForm').addEventListener('submit', function(e) {
+      e.preventDefault();
+      
+      if (cart.length === 0) {
+        alert('Your cart is empty!');
+        return;
+      }
+
+      // Get form data
+      const formData = new FormData(e.target);
+      const orderData = {
+        customer: {
+          firstName: formData.get('firstName'),
+          lastName: formData.get('lastName'),
+          email: formData.get('email'),
+          phone: formData.get('phone'),
+          address: formData.get('address'),
+          city: formData.get('city'),
+          postalCode: formData.get('postalCode')
+        },
+        paymentMethod: formData.get('paymentMethod'),
+        items: cart,
+        subtotal: cartTotal,
+        deliveryFee: deliveryFee,
+        total: cartTotal + deliveryFee,
+        orderDate: new Date().toISOString(),
+        orderId: 'ORD-' + Date.now()
+      };
+
+      // Disable submit button to prevent double submission
+      const submitBtn = document.getElementById('placeOrderBtn');
+      submitBtn.disabled = true;
+      submitBtn.textContent = 'Processing Order...';
+
+      // Process order locally (no PHP required)
+      setTimeout(() => {
+        // Store order data
+        localStorage.setItem('lastOrder', JSON.stringify(orderData));
+        
+        // Save order to local storage for admin dashboard
+        const existingOrders = JSON.parse(localStorage.getItem('allOrders') || '[]');
+        existingOrders.push(orderData);
+        localStorage.setItem('allOrders', JSON.stringify(existingOrders));
+        
+        // Send notification (if notification system is available)
+        if (window.orderNotificationSystem) {
+          window.orderNotificationSystem.addNotification(orderData);
+        }
+        
+        // Clear cart
+        localStorage.removeItem('cart');
+        
+        // Show success message and redirect
+        alert(`Order placed successfully! Your order ID is: ${orderData.orderId}\n\nOrder details have been saved locally. You will see a notification popup if the admin dashboard is open.`);
+        window.location.href = 'order-confirmation.html';
+      }, 2000);
+    });
+
+    // Initialize page
+    displayOrderSummary();
+  </script>
+</body>
+</html> 

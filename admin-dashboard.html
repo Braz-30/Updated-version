@@ -1,0 +1,446 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Admin Dashboard - SK Clothing Store</title>
+  <script>
+    // Check if user is logged in
+    if (!sessionStorage.getItem('adminLoggedIn')) {
+      window.location.href = 'admin-login.html';
+    }
+  </script>
+  <style>
+    * {
+      box-sizing: border-box;
+    }
+    body {
+      font-family: Arial, sans-serif;
+      margin: 0;
+      background-color: #f5f5f5;
+    }
+    header {
+      background-color: #222;
+      color: white;
+      padding: 15px;
+      text-align: center;
+    }
+    .container {
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 20px;
+    }
+    .dashboard-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 30px;
+      background: white;
+      padding: 20px;
+      border-radius: 8px;
+      box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+    }
+    .stats {
+      display: flex;
+      gap: 20px;
+    }
+    .stat-card {
+      background: white;
+      padding: 20px;
+      border-radius: 8px;
+      box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+      text-align: center;
+      min-width: 150px;
+    }
+    .stat-number {
+      font-size: 24px;
+      font-weight: bold;
+      color: #4CAF50;
+    }
+    .orders-section {
+      background: white;
+      padding: 30px;
+      border-radius: 8px;
+      box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+      margin-bottom: 20px;
+    }
+    .order-card {
+      border: 1px solid #ddd;
+      border-radius: 8px;
+      padding: 20px;
+      margin-bottom: 15px;
+      background: #fafafa;
+    }
+    .order-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 15px;
+      padding-bottom: 10px;
+      border-bottom: 1px solid #ddd;
+    }
+    .order-id {
+      font-weight: bold;
+      color: #4CAF50;
+      font-size: 18px;
+    }
+    .order-date {
+      color: #666;
+      font-size: 14px;
+    }
+    .order-status {
+      padding: 5px 10px;
+      border-radius: 4px;
+      font-size: 12px;
+      font-weight: bold;
+    }
+    .status-new {
+      background-color: #fff3cd;
+      color: #856404;
+    }
+    .status-processing {
+      background-color: #d1ecf1;
+      color: #0c5460;
+    }
+    .status-shipped {
+      background-color: #d4edda;
+      color: #155724;
+    }
+    .customer-info {
+      margin-bottom: 15px;
+    }
+    .customer-info h4 {
+      margin: 0 0 10px 0;
+      color: #333;
+    }
+    .customer-details {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+      gap: 10px;
+      font-size: 14px;
+    }
+    .order-items {
+      margin-bottom: 15px;
+    }
+    .order-items h4 {
+      margin: 0 0 10px 0;
+      color: #333;
+    }
+    .item {
+      display: flex;
+      justify-content: space-between;
+      padding: 5px 0;
+      border-bottom: 1px solid #eee;
+    }
+    .item:last-child {
+      border-bottom: none;
+    }
+    .order-summary {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding-top: 15px;
+      border-top: 1px solid #ddd;
+    }
+    .total-amount {
+      font-size: 18px;
+      font-weight: bold;
+      color: #4CAF50;
+    }
+    .action-buttons {
+      display: flex;
+      gap: 10px;
+    }
+    .btn {
+      padding: 8px 16px;
+      border: none;
+      border-radius: 4px;
+      cursor: pointer;
+      font-size: 14px;
+      font-weight: bold;
+    }
+    .btn-primary {
+      background-color: #4CAF50;
+      color: white;
+    }
+    .btn-primary:hover {
+      background-color: #45a049;
+    }
+    .btn-secondary {
+      background-color: #666;
+      color: white;
+    }
+    .btn-secondary:hover {
+      background-color: #555;
+    }
+    .btn-warning {
+      background-color: #ff9800;
+      color: white;
+    }
+    .btn-warning:hover {
+      background-color: #f57c00;
+    }
+    .refresh-btn {
+      background-color: #2196F3;
+      color: white;
+      border: none;
+      padding: 10px 20px;
+      border-radius: 4px;
+      cursor: pointer;
+      font-weight: bold;
+    }
+    .refresh-btn:hover {
+      background-color: #1976D2;
+    }
+    .no-orders {
+      text-align: center;
+      padding: 50px;
+      color: #666;
+    }
+    @media (max-width: 768px) {
+      .dashboard-header {
+        flex-direction: column;
+        gap: 20px;
+      }
+      .stats {
+        flex-wrap: wrap;
+        justify-content: center;
+      }
+      .order-header {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 10px;
+      }
+      .order-summary {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 10px;
+      }
+      .action-buttons {
+        flex-wrap: wrap;
+      }
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <h1>Admin Dashboard - SK Clothing Store</h1>
+  </header>
+
+  <div class="container">
+    <div class="dashboard-header">
+      <h2>Order Management</h2>
+      <div style="display: flex; gap: 10px;">
+        <button class="refresh-btn" onclick="loadOrders()">🔄 Refresh Orders</button>
+        <button class="btn btn-secondary" onclick="logout()">🚪 Logout</button>
+      </div>
+    </div>
+
+    <div class="stats">
+      <div class="stat-card">
+        <div class="stat-number" id="totalOrders">0</div>
+        <div>Total Orders</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-number" id="newOrders">0</div>
+        <div>New Orders</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-number" id="totalRevenue">Rs. 0</div>
+        <div>Total Revenue</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-number" id="notifications">0</div>
+        <div>Notifications</div>
+      </div>
+    </div>
+
+    <div class="orders-section">
+      <h3>Recent Orders</h3>
+      <div id="ordersList">
+        <div class="no-orders">Loading orders...</div>
+      </div>
+    </div>
+  </div>
+
+  <script src="notification-system.js"></script>
+  <script>
+    let orders = [];
+
+    function loadOrders() {
+      // Load orders from localStorage (no PHP required)
+      const storedOrders = localStorage.getItem('allOrders');
+      if (storedOrders) {
+        orders = JSON.parse(storedOrders);
+        displayOrders();
+        updateStats();
+      } else {
+        // Show sample data if no orders exist
+        orders = getSampleOrders();
+        displayOrders();
+        updateStats();
+      }
+    }
+
+    function getSampleOrders() {
+      return [
+        {
+          orderId: 'ORD-1703123456789',
+          orderDate: '2023-12-21T10:30:00.000Z',
+          customer: {
+            firstName: 'John',
+            lastName: 'Doe',
+            email: 'john@example.com',
+            phone: '+977-9828808001',
+            address: '123 Main Street',
+            city: 'Kathmandu',
+            postalCode: '44600'
+          },
+          items: [
+            {
+              name: 'Hoodie',
+              price: 1899,
+              quantity: 2,
+              image: 'Hoodie.jpg'
+            }
+          ],
+          subtotal: 3798,
+          deliveryFee: 200,
+          total: 3998,
+          paymentMethod: 'cod',
+          status: 'new'
+        }
+      ];
+    }
+
+    function displayOrders() {
+      const ordersList = document.getElementById('ordersList');
+      
+      if (orders.length === 0) {
+        ordersList.innerHTML = '<div class="no-orders">No orders found</div>';
+        return;
+      }
+
+      ordersList.innerHTML = '';
+      
+      // Sort orders by date (newest first)
+      const sortedOrders = orders.sort((a, b) => new Date(b.orderDate) - new Date(a.orderDate));
+      
+      sortedOrders.forEach(order => {
+        const orderCard = document.createElement('div');
+        orderCard.className = 'order-card';
+        
+        const orderDate = new Date(order.orderDate);
+        const status = order.status || 'new';
+        
+        orderCard.innerHTML = `
+          <div class="order-header">
+            <div>
+              <div class="order-id">${order.orderId}</div>
+              <div class="order-date">${orderDate.toLocaleDateString()} at ${orderDate.toLocaleTimeString()}</div>
+            </div>
+            <div>
+              <span class="order-status status-${status}">${status.toUpperCase()}</span>
+            </div>
+          </div>
+          
+          <div class="customer-info">
+            <h4>Customer Information</h4>
+            <div class="customer-details">
+              <div><strong>Name:</strong> ${order.customer.firstName} ${order.customer.lastName}</div>
+              <div><strong>Email:</strong> ${order.customer.email}</div>
+              <div><strong>Phone:</strong> ${order.customer.phone}</div>
+              <div><strong>Address:</strong> ${order.customer.address}, ${order.customer.city} ${order.customer.postalCode}</div>
+            </div>
+          </div>
+          
+          <div class="order-items">
+            <h4>Order Items</h4>
+            ${order.items.map(item => `
+              <div class="item">
+                <span>${item.name} x${item.quantity}</span>
+                <span>Rs. ${(item.price * item.quantity).toLocaleString()}</span>
+              </div>
+            `).join('')}
+          </div>
+          
+          <div class="order-summary">
+            <div>
+              <div><strong>Payment Method:</strong> ${getPaymentMethodName(order.paymentMethod)}</div>
+              <div class="total-amount">Total: Rs. ${order.total.toLocaleString()}</div>
+            </div>
+            <div class="action-buttons">
+              <button class="btn btn-primary" onclick="updateOrderStatus('${order.orderId}', 'processing')">Mark Processing</button>
+              <button class="btn btn-warning" onclick="updateOrderStatus('${order.orderId}', 'shipped')">Mark Shipped</button>
+              <button class="btn btn-secondary" onclick="viewOrderDetails('${order.orderId}')">View Details</button>
+            </div>
+          </div>
+        `;
+        
+        ordersList.appendChild(orderCard);
+      });
+    }
+
+    function updateStats() {
+      const totalOrders = orders.length;
+      const newOrders = orders.filter(order => (order.status || 'new') === 'new').length;
+      const totalRevenue = orders.reduce((sum, order) => sum + order.total, 0);
+      const notifications = window.orderNotificationSystem ? window.orderNotificationSystem.getUnreadCount() : 0;
+      
+      document.getElementById('totalOrders').textContent = totalOrders;
+      document.getElementById('newOrders').textContent = newOrders;
+      document.getElementById('totalRevenue').textContent = `Rs. ${totalRevenue.toLocaleString()}`;
+      document.getElementById('notifications').textContent = notifications;
+    }
+
+    function getPaymentMethodName(method) {
+      const methods = {
+        'cod': 'Cash on Delivery',
+        'card': 'Credit/Debit Card',
+        'esewa': 'eSewa'
+      };
+      return methods[method] || method;
+    }
+
+    function updateOrderStatus(orderId, newStatus) {
+      const order = orders.find(o => o.orderId === orderId);
+      if (order) {
+        order.status = newStatus;
+        // Update in localStorage
+        localStorage.setItem('allOrders', JSON.stringify(orders));
+        alert(`Order ${orderId} status updated to ${newStatus}`);
+        displayOrders();
+        updateStats();
+      }
+    }
+
+    function viewOrderDetails(orderId) {
+      const order = orders.find(o => o.orderId === orderId);
+      if (order) {
+        const details = `
+Order ID: ${order.orderId}
+Customer: ${order.customer.firstName} ${order.customer.lastName}
+Email: ${order.customer.email}
+Phone: ${order.customer.phone}
+Address: ${order.customer.address}, ${order.customer.city} ${order.customer.postalCode}
+Payment: ${getPaymentMethodName(order.paymentMethod)}
+Total: Rs. ${order.total.toLocaleString()}
+Items: ${order.items.map(item => `${item.name} x${item.quantity}`).join(', ')}
+        `;
+        alert(details);
+      }
+    }
+
+    function logout() {
+      sessionStorage.removeItem('adminLoggedIn');
+      window.location.href = 'admin-login.html';
+    }
+
+    // Load orders when page loads
+    loadOrders();
+    
+    // Auto-refresh every 30 seconds
+    setInterval(loadOrders, 30000);
+  </script>
+</body>
+</html> 

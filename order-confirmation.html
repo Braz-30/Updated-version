@@ -1,0 +1,309 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Order Confirmation - SK Clothing Store</title>
+  <style>
+    * {
+      box-sizing: border-box;
+    }
+    body {
+      font-family: Arial, sans-serif;
+      margin: 0;
+      background-color: #f5f5f5;
+    }
+    header {
+      background-color: #222;
+      color: white;
+      padding: 15px;
+      text-align: center;
+    }
+    .container {
+      max-width: 800px;
+      margin: 0 auto;
+      padding: 20px;
+    }
+    .confirmation-card {
+      background: white;
+      padding: 40px;
+      border-radius: 8px;
+      box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+      text-align: center;
+      margin-bottom: 30px;
+    }
+    .success-icon {
+      font-size: 60px;
+      color: #4CAF50;
+      margin-bottom: 20px;
+    }
+    .order-id {
+      background-color: #f0f8ff;
+      padding: 15px;
+      border-radius: 4px;
+      margin: 20px 0;
+      font-family: monospace;
+      font-size: 18px;
+      color: #333;
+    }
+    .order-details {
+      background: white;
+      padding: 30px;
+      border-radius: 8px;
+      box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+      margin-bottom: 30px;
+    }
+    .detail-section {
+      margin-bottom: 30px;
+    }
+    .detail-section h3 {
+      color: #333;
+      border-bottom: 2px solid #4CAF50;
+      padding-bottom: 10px;
+      margin-bottom: 20px;
+    }
+    .detail-row {
+      display: flex;
+      justify-content: space-between;
+      margin-bottom: 10px;
+      padding: 10px 0;
+      border-bottom: 1px solid #eee;
+    }
+    .detail-row:last-child {
+      border-bottom: none;
+      font-weight: bold;
+      color: #4CAF50;
+      font-size: 18px;
+    }
+    .order-item {
+      display: flex;
+      align-items: center;
+      padding: 15px 0;
+      border-bottom: 1px solid #eee;
+    }
+    .order-item:last-child {
+      border-bottom: none;
+    }
+    .order-item img {
+      width: 60px;
+      height: 60px;
+      object-fit: cover;
+      border-radius: 4px;
+      margin-right: 15px;
+    }
+    .order-item-details {
+      flex: 1;
+    }
+    .order-item-name {
+      font-weight: bold;
+      margin-bottom: 5px;
+    }
+    .order-item-price {
+      color: #666;
+    }
+    .order-item-quantity {
+      color: #666;
+      font-size: 14px;
+    }
+    .order-item-total {
+      font-weight: bold;
+      color: #4CAF50;
+    }
+    .action-buttons {
+      text-align: center;
+      margin-top: 30px;
+    }
+    .btn {
+      display: inline-block;
+      padding: 12px 24px;
+      margin: 0 10px;
+      border-radius: 4px;
+      text-decoration: none;
+      font-weight: bold;
+      cursor: pointer;
+      border: none;
+      font-size: 16px;
+    }
+    .btn-primary {
+      background-color: #4CAF50;
+      color: white;
+    }
+    .btn-primary:hover {
+      background-color: #45a049;
+    }
+    .btn-secondary {
+      background-color: #666;
+      color: white;
+    }
+    .btn-secondary:hover {
+      background-color: #555;
+    }
+    .delivery-info {
+      background-color: #fff3e0;
+      padding: 20px;
+      border-radius: 8px;
+      margin-top: 20px;
+      border-left: 4px solid #ff9800;
+    }
+    .delivery-info h4 {
+      color: #e65100;
+      margin-top: 0;
+    }
+    @media (max-width: 768px) {
+      .container {
+        padding: 10px;
+      }
+      .confirmation-card,
+      .order-details {
+        padding: 20px;
+      }
+      .detail-row {
+        flex-direction: column;
+        align-items: flex-start;
+      }
+      .detail-row span:last-child {
+        margin-top: 5px;
+        font-weight: bold;
+      }
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <h1>Order Confirmation</h1>
+  </header>
+
+  <div class="container">
+    <div class="confirmation-card">
+      <div class="success-icon">✅</div>
+      <h2>Thank You for Your Order!</h2>
+      <p>Your order has been successfully placed. We'll send you an email confirmation shortly.</p>
+      <div class="order-id" id="orderId"></div>
+    </div>
+
+    <div class="order-details">
+      <div class="detail-section">
+        <h3>Customer Information</h3>
+        <div id="customerInfo"></div>
+      </div>
+
+      <div class="detail-section">
+        <h3>Order Items</h3>
+        <div id="orderItems"></div>
+      </div>
+
+      <div class="detail-section">
+        <h3>Order Summary</h3>
+        <div id="orderSummary"></div>
+      </div>
+
+      <div class="delivery-info">
+        <h4>📦 Delivery Information</h4>
+        <p><strong>Estimated Delivery:</strong> 3-5 business days</p>
+        <p><strong>Delivery Method:</strong> Standard Delivery</p>
+        <p><strong>Payment Method:</strong> <span id="paymentMethod"></span></p>
+        <p>You will receive SMS updates about your order status.</p>
+      </div>
+    </div>
+
+    <div class="action-buttons">
+      <a href="index.html" class="btn btn-primary">Continue Shopping</a>
+      <button onclick="window.print()" class="btn btn-secondary">Print Receipt</button>
+    </div>
+  </div>
+
+  <script>
+    // Get order data from localStorage
+    const orderData = JSON.parse(localStorage.getItem('lastOrder'));
+
+    if (!orderData) {
+      // Redirect to home if no order data
+      window.location.href = 'index.html';
+    }
+
+    function displayOrderConfirmation() {
+      // Display order ID
+      document.getElementById('orderId').textContent = `Order ID: ${orderData.orderId}`;
+
+      // Display customer information
+      const customerInfo = document.getElementById('customerInfo');
+      customerInfo.innerHTML = `
+        <div class="detail-row">
+          <span>Name:</span>
+          <span>${orderData.customer.firstName} ${orderData.customer.lastName}</span>
+        </div>
+        <div class="detail-row">
+          <span>Email:</span>
+          <span>${orderData.customer.email}</span>
+        </div>
+        <div class="detail-row">
+          <span>Phone:</span>
+          <span>${orderData.customer.phone}</span>
+        </div>
+        <div class="detail-row">
+          <span>Address:</span>
+          <span>${orderData.customer.address}</span>
+        </div>
+        <div class="detail-row">
+          <span>City:</span>
+          <span>${orderData.customer.city}</span>
+        </div>
+        <div class="detail-row">
+          <span>Postal Code:</span>
+          <span>${orderData.customer.postalCode}</span>
+        </div>
+      `;
+
+      // Display order items
+      const orderItems = document.getElementById('orderItems');
+      orderItems.innerHTML = '';
+      
+      orderData.items.forEach(item => {
+        const itemTotal = item.price * item.quantity;
+        orderItems.innerHTML += `
+          <div class="order-item">
+            <img src="${item.image}" alt="${item.name}">
+            <div class="order-item-details">
+              <div class="order-item-name">${item.name}</div>
+              <div class="order-item-price">Rs. ${item.price}</div>
+              <div class="order-item-quantity">Quantity: ${item.quantity}</div>
+            </div>
+            <div class="order-item-total">
+              Rs. ${itemTotal.toLocaleString()}
+            </div>
+          </div>
+        `;
+      });
+
+      // Display order summary
+      const orderSummary = document.getElementById('orderSummary');
+      orderSummary.innerHTML = `
+        <div class="detail-row">
+          <span>Subtotal:</span>
+          <span>Rs. ${orderData.subtotal.toLocaleString()}</span>
+        </div>
+        <div class="detail-row">
+          <span>Delivery Fee:</span>
+          <span>Rs. ${orderData.deliveryFee}</span>
+        </div>
+        <div class="detail-row">
+          <span>Total:</span>
+          <span>Rs. ${orderData.total.toLocaleString()}</span>
+        </div>
+      `;
+
+      // Display payment method
+      const paymentMethod = document.getElementById('paymentMethod');
+      const paymentMethods = {
+        'cod': 'Cash on Delivery',
+        'card': 'Credit/Debit Card',
+        'esewa': 'eSewa'
+      };
+      paymentMethod.textContent = paymentMethods[orderData.paymentMethod] || orderData.paymentMethod;
+    }
+
+    // Initialize page
+    displayOrderConfirmation();
+  </script>
+</body>
+</html> 

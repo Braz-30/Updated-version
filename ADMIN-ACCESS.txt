@@ -1,0 +1,29 @@
+ADMIN PANEL ACCESS INSTRUCTIONS
+================================
+
+To access the admin panel:
+
+1. Go to: admin-login.html
+2. Enter password: admin123
+3. Click "Login to Admin Panel"
+
+SECURITY NOTES:
+- The admin link has been removed from the public navigation
+- Only you should know the password
+- You can change the password in admin-login.html (line with password === 'admin123')
+- The session expires when you close the browser or click logout
+- All data is stored locally in your browser
+
+ADMIN FEATURES:
+- View all orders (stored in browser localStorage)
+- See customer details
+- Update order status
+- View order statistics
+- Real-time order monitoring
+- No server required - works completely offline
+
+TECHNICAL NOTES:
+- No PHP or server setup required
+- All data is stored in browser localStorage
+- Works offline and locally
+- Orders persist between browser sessions 
