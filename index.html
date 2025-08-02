@@ -4,7 +4,388 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>SK Clothing Store</title>
+  <style><!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>SK Clothing Store</title>
   <style>
+    * {
+      box-sizing: border-box;
+    }
+    body {
+      margin: 0;
+      font-family: Arial, sans-serif;
+    }
+    header {
+      background-color: #222;
+      color: white;
+      padding: 15px;
+      text-align: center;
+      position: relative;
+    }
+    .cart-icon {
+      position: absolute;
+      right: 20px;
+      top: 50%;
+      transform: translateY(-50%);
+      cursor: pointer;
+      font-size: 24px;
+    }
+    .cart-count {
+      background-color: #ff4444;
+      color: white;
+      border-radius: 50%;
+      padding: 2px 6px;
+      font-size: 12px;
+      position: absolute;
+      top: -5px;
+      right: -5px;
+    }
+    nav {
+      background-color: #333;
+      display: flex;
+      flex-wrap: wrap;
+    }
+    nav a {
+      flex: 1 0 auto;
+      color: white;
+      text-align: center;
+      padding: 14px;
+      text-decoration: none;
+    }
+    nav a:hover {
+      background-color: #ddd;
+      color: black;
+    }
+
+    .home-banner {
+      width: 100%;
+      height: 200px;
+      background-image: url('Baxkgnd.jpg');
+      background-size: cover;
+      background-position: center;
+    }
+
+    .container {
+      display: flex;
+      flex-wrap: wrap;
+      padding: 20px;
+    }
+    .main {
+      flex: 3;
+      min-width: 250px;
+      padding: 10px;
+    }
+    .sidebar {
+      flex: 1;
+      min-width: 200px;
+      padding: 10px;
+      background-color: #f4f4f4;
+    }
+
+    .info-box {
+      background-color: #fff3e0;
+      padding: 15px;
+      border-radius: 8px;
+    }
+
+    .product-grid {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 15px;
+    }
+    .product {
+      flex: 1 1 calc(33.33% - 15px);
+      background-color: #fafafa;
+      padding: 10px;
+      border: 1px solid #ddd;
+      border-radius: 5px;
+      text-align: center;
+      position: relative;
+      transition: transform 0.2s, box-shadow 0.2s;
+    }
+    .product:hover {
+      transform: translateY(-5px);
+      box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+    }
+    .product img {
+      width: 100%;
+      height: auto;
+      border-radius: 5px;
+    }
+    .product a {
+      text-decoration: none;
+      color: inherit;
+      display: block;
+    }
+
+    .contact-section, #order-section {
+      background-color: #fffae6;
+      padding: 20px;
+      border: 2px solid #ffcc00;
+      border-radius: 8px;
+      margin: 15px;
+    }
+
+    .service-section {
+      background-color: #f0f8ff;
+      padding: 30px;
+      margin: 20px;
+      border-radius: 8px;
+      border-left: 4px solid #4CAF50;
+      display: none;
+    }
+
+    .about-section {
+      background-color: #f9f9f9;
+      padding: 30px;
+      margin: 20px;
+      border-radius: 8px;
+      border-left: 4px solid #2196F3;
+      display: none;
+    }
+
+    .service-section h2, .about-section h2 {
+      color: #333;
+      margin-bottom: 20px;
+    }
+
+    .service-section ul {
+      list-style-type: none;
+      padding: 0;
+    }
+
+    .service-section li {
+      padding: 10px 0;
+      border-bottom: 1px solid #ddd;
+      position: relative;
+      padding-left: 25px;
+    }
+
+    .service-section li:before {
+      content: "✓";
+      color: #4CAF50;
+      font-weight: bold;
+      position: absolute;
+      left: 0;
+    }
+
+    .service-section li:last-child {
+      border-bottom: none;
+    }
+
+    @media (max-width: 768px) {
+      nav {
+        flex-direction: column;
+      }
+      nav a {
+        width: 100%;
+      }
+      .container {
+        flex-direction: column;
+      }
+      .product {
+        flex: 1 1 100%;
+      }
+    }
+  </style>
+</head>
+<body>
+
+  <header>
+    <h1>SK Clothing Store</h1>
+    <div class="cart-icon" onclick="openCart()">
+      🛒 <span class="cart-count" id="cartCount">0</span>
+    </div>
+  </header>
+
+  <nav>
+    <a href="#" onclick="showSection('home-section')">Home</a>
+    <a href="#" onclick="showSection('service-section')">Service</a>
+    <a href="#" onclick="showSection('contact-section')">Contact</a>
+    <a href="#" onclick="showSection('about-section')">About Us</a>
+    <a href="#" onclick="showSection('order-section')">Order</a>
+  </nav>
+
+  <!-- HOME -->
+  <div id="home-section">
+    <div class="home-banner"></div>
+
+    <div class="container">
+      <div class="main">
+        <div class="info-box">
+          <h2>Welcome to SK Clothing Store</h2>
+          <p>Explore our latest collection of trendy and comfortable apparel for every season.</p>
+        </div>
+
+       <!-- HOME PAGE PRODUCT SECTION -->
+      <div class="product-grid">
+        <!-- Jacket -->
+        <a href="jacket.html">
+          <div class="product">
+            <img src="Jacket.jpg" alt="Jacket" />
+            <h3>Jacket</h3>
+            <p><strong>Price:</strong> Rs. 2,499</p>
+          </div>
+        </a>
+
+        <!-- T-Shirt -->
+        <a href="tshirt.html">
+          <div class="product">
+            <img src="Tshirt.jpg" alt="T-Shirt" />
+            <h3>T-Shirt</h3>
+            <p><strong>Price:</strong> Rs. 1,299</p>
+          </div>
+        </a>
+
+        <!-- Hoodie -->
+        <a href="hoodie.html">
+          <div class="product">
+            <img src="Hoodie.jpg" alt="Hoodie" />
+            <h3>Hoodie</h3>
+            <p><strong>Price:</strong> Rs. 1,899</p>
+          </div>
+        </a>
+
+        <!-- Shoes -->
+        <a href="shoes.html">
+          <div class="product">
+            <img src="Shoes.jpg" alt="Shoes" />
+            <h3>Shoes</h3>
+            <p><strong>Price:</strong> Rs. 3,499</p>
+          </div>
+        </a>
+
+        <!-- Pant -->
+        <a href="pant.html">
+          <div class="product">
+            <img src="Pant.jpg" alt="Pant" />
+            <h3>Pant</h3>
+            <p><strong>Price:</strong> Rs. 1,599</p>
+          </div>
+        </a>
+      </div>
+      <div class="sidebar">
+        <h3>Categories</h3>
+        <ul>
+          <li><a href="jacket.html">Jackets</a></li>
+          <li><a href="tshirt.html">T-Shirts</a></li>
+          <li><a href="pant.html">Pants</a></li>
+          <li><a href="hoodie.html">Hoodies</a></li>
+          <li><a href="shoes.html">Shoes</a></li>
+          <li><a href="#">Offers</a></li>
+        </ul>
+      </div>
+     </div>
+  </div>
+
+  <!-- SERVICE -->
+  <div id="service-section" class="service-section">
+    <h2>Our Services</h2>
+    <ul>
+      <li>Online shopping and in-store pickup</li>
+      <li>Home delivery</li>
+      <li>Fast interactions</li>
+      <li>Easy return policy</li>
+      <li>Eco-friendly packaging</li>
+      <li>Great quality products</li>
+    </ul>
+  </div>
+
+  <!-- CONTACT -->
+  <div id="contact-section" class="contact-section" style="display:none;">
+    <h2>Contact Us</h2>
+    <p><strong>Address:</strong> New Road, Kathmandu, Nepal</p>
+    <p><strong>Email:</strong> support@sk.com</p>
+    <p><strong>Phone:</strong> +977-9828808001</p>
+    <p><strong>Opening Hours:</strong> Sun–Fri, 10:00 AM – 6:00 PM</p>
+  </div>
+
+  <!-- ABOUT -->
+  <div id="about-section" class="about-section" style="display:none;">
+    <h2>About Us</h2>
+    <p>SK Clothing Store is an online platform for buying quality clothes and shoes. We're top-ranked for quality and customer service.</p>
+  </div>
+
+  <!-- ORDER -->
+  <div id="order-section" class="contact-section" style="display:none;">
+    <h2>Place Your Order</h2>
+    <form action="https://formspree.io/f/xzzvazwl" method="POST">
+      <label for="name">Full Name:</label><br />
+      <input type="text" id="name" name="name" required /><br /><br />
+    
+      <label for="email">Email:</label><br />
+      <input type="email" id="email" name="_replyto" required /><br /><br />
+    
+      <label for="phone">Phone Number:</label><br />
+      <input type="text" id="phone" name="phone" /><br /><br />
+    
+      <label for="product">Product Name:</label><br />
+      <input type="text" id="product" name="product" placeholder="e.g., Hoodie" required /><br /><br />
+    
+      <label for="quantity">Quantity:</label><br />
+      <input type="number" id="quantity" name="quantity" min="1" required /><br /><br />
+    
+      <label for="address">Delivery Address:</label><br />
+      <textarea id="address" name="address" required></textarea><br /><br />
+    
+      <input type="hidden" name="_next" value="thankyou.html" />
+      <input type="hidden" name="_captcha" value="false" />
+    
+      <button type="submit">Submit Order</button>
+    </form>   
+  </div>
+
+  <script src="notification-system.js"></script>
+  <script>
+    // Cart functionality for navigation
+    let cart = JSON.parse(localStorage.getItem('cart')) || [];
+
+    function updateCartCount() {
+      const count = cart.reduce((total, item) => total + item.quantity, 0);
+      document.getElementById('cartCount').textContent = count;
+    }
+
+    function openCart() {
+      // Redirect to checkout page to view cart
+      window.location.href = 'checkout.html';
+    }
+
+    // Simple navigation function
+    function showSection(sectionId) {
+      // Hide all sections
+      const sections = [
+        'home-section',
+        'service-section',
+        'contact-section',
+        'about-section',
+        'order-section',
+      ];
+      sections.forEach((id) => {
+        const section = document.getElementById(id);
+        if (section) {
+          section.style.display = 'none';
+        }
+      });
+
+      // Show the selected section
+      const targetSection = document.getElementById(sectionId);
+      if (targetSection) {
+        targetSection.style.display = 'block';
+      }
+    }
+
+    // Initialize cart count on page load
+    updateCartCount();
+
+    // Show home section on page load
+    showSection('home-section');
+  </script>
+</body>
+</html>
+
     * {
       box-sizing: border-box;
     }
@@ -243,3 +624,4 @@
 
 </body>
 </html>
+
